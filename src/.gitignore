@@ -1,0 +1,42 @@
+# Dependencies
+/node_modules
+/.pnpm-store
+/.yarn/cache
+/.yarn/unplugged
+/.pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+npm-debug.log*
+
+# Next.js Build Output
+/.next/
+/out/
+/build
+/dist
+
+# Environment Variables & Local Configs (Crucial for Security)
+.env
+.env*.local
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE & Editor Files
+.vscode/
+.idea/
+*.swp
+*.swo
+*.DS_Store
+Thumbs.db
+
+# Logs & Diagnostics
+logs
+*.log
+
+# Vercel Deployment Metadata
+.vercel
+
+# Testing & Coverage
+/coverage
+/.nyc_output
