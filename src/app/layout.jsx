@@ -1,5 +1,6 @@
 import "@/styles/globals.css";
 import { Fraunces, Oswald, Inter } from "next/font/google";
+import ToasterProvider from "@/components/ui/ToasterProvider";
 
 const fraunces = Fraunces({
   subsets: ["latin"],
@@ -25,7 +26,11 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${fraunces.variable} ${oswald.variable} ${inter.variable}`}>
-      <body className="font-body">{children}</body>
+      <body className="font-body">
+        {children}
+        <ToasterProvider />
+      </body>
     </html>
   );
 }
+
