@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AUGUST VISUM — Forever Classics</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#17140F;
+    --paper:#EAE3D3;
+    --off:#F7F4EC;
+    --olive:#4B4B37;
+    --brick:#9A2E1F;
+    --stone:#B9A889;
+    --line: rgba(23,20,15,0.16);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  a{color:inherit; text-decoration:none;}
+  .disp{font-family:'Fraunces',serif;}
+  .cond{font-family:'Oswald',sans-serif; text-transform:uppercase; letter-spacing:0.04em;}
+
+  /* ===== TOPBAR ===== */
+  .topbar{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:14px 32px;
+    border-bottom:1px solid var(--line);
+    font-family:'Oswald',sans-serif;
+    font-size:11px;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    background:var(--paper);
+    position:sticky; top:0; z-index:50;
+  }
+  .topbar .issue{color:var(--brick); font-weight:600;}
+  .topbar-center{display:flex; gap:28px;}
+  .topbar-center a{opacity:0.75; transition:opacity .2s;}
+  .topbar-center a:hover{opacity:1;}
+  .topbar-right{display:flex; gap:18px; align-items:center;}
+  .cart-dot{
+    width:6px;height:6px;border-radius:50%;background:var(--brick);
+    display:inline-block; margin-left:6px;
+  }
+
+  /* ===== LOGO MARK ===== */
+  .logo-mark{
+    display:inline-block; vertical-align:middle;
+    transition:transform .6s cubic-bezier(.2,.8,.2,1);
+  }
+  .logo-mark:hover{ transform:rotate(8deg) scale(1.06); }
+  .topbar-brand{ display:flex; align-items:center; gap:10px; }
+  .topbar-brand .logo-mark{ width:20px; height:20px; }
+
+  /* ===== MOTION ===== */
+  @keyframes fadeUp{
+    from{ opacity:0; transform:translateY(22px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+  .anim{ opacity:0; animation:fadeUp .85s cubic-bezier(.2,.8,.2,1) forwards; }
+  .anim-d1{ animation-delay:.05s; }
+  .anim-d2{ animation-delay:.2s; }
+  .anim-d3{ animation-delay:.34s; }
+  .anim-d4{ animation-delay:.46s; }
+  .anim-d5{ animation-delay:.58s; }
+  .anim-d6{ animation-delay:.7s; }
+  .anim-d7{ animation-delay:.82s; }
+
+  .reveal{
+    opacity:0; transform:translateY(26px);
+    transition:opacity .7s cubic-bezier(.2,.8,.2,1), transform .7s cubic-bezier(.2,.8,.2,1);
+  }
+  .reveal.in-view{ opacity:1; transform:translateY(0); }
+
+  /* ===== NAV / MASTHEAD ===== */
+  .masthead-row{
+    display:flex; align-items:flex-end; justify-content:space-between;
+    padding:26px 32px 10px;
+    border-bottom:1px solid var(--line);
+  }
+  .masthead{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-size:clamp(48px, 8vw, 110px);
+    line-height:0.86;
+    letter-spacing:-0.01em;
+  }
+  .masthead .accent{font-style:italic; font-weight:500; color:var(--brick);}
+  .masthead-meta{
+    text-align:right;
+    font-family:'Oswald',sans-serif;
+    font-size:11px;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    opacity:0.65;
+    line-height:1.7;
+  }
+
+  /* ===== HERO ===== */
+  .hero{
+    position:relative;
+    min-height:680px;
+    background:var(--off);
+    overflow:hidden;
+    border-bottom:1px solid var(--line);
+  }
+  .hero-type{
+    position:absolute;
+    top:36px; left:40px; right:40px;
+    z-index:1;
+    font-family:'Oswald',sans-serif;
+    font-weight:700;
+    text-transform:uppercase;
+    font-size:clamp(64px, 10.5vw, 158px);
+    line-height:0.84;
+    letter-spacing:-0.01em;
+    color:rgba(23,20,15,0.12);
+    pointer-events:none;
+    user-select:none;
+  }
+  .hero-page-num{
+    position:absolute; top:28px; right:32px; z-index:3;
+    font-family:'Oswald',sans-serif; font-size:11px; letter-spacing:0.1em;
+    text-transform:uppercase; color:rgba(23,20,15,0.5);
+  }
+  .hero-figures{
+    position:relative; z-index:2;
+    display:flex; align-items:flex-end; justify-content:center;
+    height:680px; padding-top:170px;
+    gap:0;
+  }
+  .fig{ height:78%; display:block; margin:0 -14px; filter:drop-shadow(0 18px 20px rgba(23,20,15,0.16)); }
+  .fig:nth-child(1){ height:66%; align-self:flex-end; }
+  .fig:nth-child(2){ height:80%; }
+  .fig:nth-child(3){ height:92%; }
+  .fig:nth-child(4){ height:76%; }
+  .fig:nth-child(5){ height:70%; align-self:flex-end; }
+  .hero-cap{
+    position:absolute; bottom:28px; left:28px; z-index:3;
+    background:var(--off);
+    padding:20px 22px;
+    max-width:300px;
+    box-shadow:0 10px 30px rgba(23,20,15,0.2);
+  }
+  .hero-cap .mark{
+    font-family:'Oswald',sans-serif; font-weight:700; font-size:15px;
+    letter-spacing:0.02em; text-transform:uppercase; margin-bottom:10px;
+  }
+  .hero-cap .mark span{color:var(--brick);}
+  .hero-cap .title{
+    font-family:'Fraunces',serif; font-weight:600; font-size:22px; margin-bottom:8px;
+  }
+  .hero-cap .desc{
+    font-size:12.5px; line-height:1.6; color:rgba(23,20,15,0.68); margin-bottom:16px;
+  }
+  .hero-cap .cta-row{display:flex; align-items:center; gap:18px;}
+  .btn-primary{
+    background:var(--ink); color:var(--off);
+    font-family:'Oswald',sans-serif; font-size:11px; letter-spacing:0.1em;
+    text-transform:uppercase; padding:12px 22px;
+    display:inline-block; transition:background .2s;
+  }
+  .btn-primary:hover{background:var(--brick);}
+  .btn-ghost{
+    font-family:'Oswald',sans-serif; font-size:11px; letter-spacing:0.1em;
+    text-transform:uppercase; border-bottom:1px solid var(--ink); padding-bottom:2px;
+  }
+
+  /* ===== TICKER ===== */
+  .ticker{
+    background:var(--ink); color:var(--off);
+    overflow:hidden; white-space:nowrap;
+    border-bottom:1px solid var(--line);
+  }
+  .ticker-track{
+    display:inline-block;
+    padding:13px 0;
+    animation: scroll 28s linear infinite;
+    font-family:'Oswald',sans-serif; font-size:12px; letter-spacing:0.14em; text-transform:uppercase;
+  }
+  .ticker-track span{margin:0 28px; opacity:0.9;}
+  .ticker-track span.dot{opacity:0.4; margin:0 6px;}
+  @keyframes scroll{
+    0%{transform:translateX(0);}
+    100%{transform:translateX(-50%);}
+  }
+
+  /* ===== SECTION HEADERS (contents-style) ===== */
+  .section{padding:64px 32px; border-bottom:1px solid var(--line);}
+  .contents-header{
+    display:flex; align-items:baseline; gap:18px; margin-bottom:40px;
+  }
+  .contents-header .num{
+    font-family:'Fraunces',serif; font-style:italic; font-size:16px; color:var(--brick);
+  }
+  .contents-header h2{
+    font-family:'Fraunces',serif; font-weight:500; font-size:clamp(26px,3vw,38px); letter-spacing:-0.01em;
+  }
+  .contents-header .leader{
+    flex:1; border-bottom:1px dotted rgba(23,20,15,0.35); transform:translateY(-6px);
+  }
+  .contents-header .tag{
+    font-family:'Oswald',sans-serif; font-size:11px; letter-spacing:0.1em; text-transform:uppercase; opacity:0.6;
+  }
+
+  /* ===== SHOP THE LOOK RAIL ===== */
+  .rail{
+    display:flex; gap:20px; overflow-x:auto; padding-bottom:10px;
+    scrollbar-width:none;
+  }
+  .rail::-webkit-scrollbar{display:none;}
+  .rail-card{
+    flex:0 0 260px;
+    background:var(--off);
+    border:1px solid var(--line);
+  }
+  .rail-card .swatch{
+    height:300px;
+    position:relative;
+  }
+  .swatch.c1{background:linear-gradient(160deg,#C9BEA1,#7A7A5C);}
+  .swatch.c2{background:linear-gradient(160deg,#3A3A2E,#17140F);}
+  .swatch.c3{background:linear-gradient(160deg,#9A2E1F,#5C1A11);}
+  .swatch.c4{background:linear-gradient(160deg,#B9A889,#8C7E5F);}
+  .swatch.c5{background:linear-gradient(160deg,#4B4B37,#232318);}
+  .swatch::before{
+    content:'';
+    position:absolute; inset:0;
+    background: repeating-linear-gradient(125deg, rgba(255,255,255,0.06) 0 2px, transparent 2px 22px);
+  }
+  .swatch .pg{
+    position:absolute; top:12px; left:12px;
+    font-family:'Oswald',sans-serif; font-size:10px; letter-spacing:0.08em;
+    color:var(--off); text-transform:uppercase; opacity:0.85;
+  }
+  .rail-card .info{padding:16px;}
+  .rail-card .info .name{
+    font-family:'Fraunces',serif; font-weight:600; font-size:16px; margin-bottom:6px;
+  }
+  .rail-card .info .price-row{
+    display:flex; align-items:center; gap:10px;
+    font-family:'Oswald',sans-serif; font-size:12px; letter-spacing:0.04em;
+  }
+  .rail-card .info .price-row .now{color:var(--brick); font-weight:600;}
+  .rail-card .info .price-row .was{text-decoration:line-through; opacity:0.45;}
+  .rail-card .info .meta{
+    margin-top:10px; font-family:'Oswald',sans-serif; font-size:10px;
+    letter-spacing:0.1em; text-transform:uppercase; opacity:0.55;
+  }
+
+  /* ===== EDITORIAL SPLIT ===== */
+  .editorial{
+    display:grid; grid-template-columns: 1fr 1fr;
+    border-bottom:1px solid var(--line);
+  }
+  .editorial-img{
+    min-height:460px;
+    background:
+      repeating-linear-gradient(100deg, rgba(23,20,15,0.05) 0 2px, transparent 2px 30px),
+      linear-gradient(200deg,#8C8264 0%, #4B4B37 55%, #17140F 100%);
+    position:relative;
+  }
+  .editorial-img .cap{
+    position:absolute; bottom:24px; left:24px; right:24px;
+    display:flex; justify-content:space-between; align-items:flex-end;
+    font-family:'Oswald',sans-serif; font-size:11px; color:var(--off);
+    letter-spacing:0.08em; text-transform:uppercase; opacity:0.85;
+  }
+  .editorial-text{
+    padding:64px 56px;
+    display:flex; flex-direction:column; justify-content:center;
+    background:var(--off);
+  }
+  .editorial-text .eyebrow{
+    font-family:'Oswald',sans-serif; font-size:12px; letter-spacing:0.14em;
+    text-transform:uppercase; color:var(--brick); margin-bottom:20px;
+  }
+  .editorial-text h3{
+    font-family:'Fraunces',serif; font-weight:500; font-size:clamp(26px,2.6vw,36px);
+    line-height:1.15; margin-bottom:22px; letter-spacing:-0.01em;
+  }
+  .editorial-text h3 em{font-style:italic; color:var(--olive);}
+  .editorial-text p{
+    font-size:15px; line-height:1.75; color:rgba(23,20,15,0.72); max-width:42ch; margin-bottom:28px;
+  }
+
+  /* ===== PRODUCT GRID ===== */
+  .grid{
+    display:grid; grid-template-columns:repeat(4,1fr); gap:1px;
+    background:var(--line); border:1px solid var(--line);
+  }
+  .card{
+    background:var(--off); display:flex; flex-direction:column;
+  }
+  .card .thumb{height:280px; position:relative;}
+  .card .thumb .pg{
+    position:absolute; top:12px; left:12px;
+    font-family:'Oswald',sans-serif; font-size:10px; color:var(--off);
+    letter-spacing:0.08em; text-transform:uppercase; opacity:0.9;
+  }
+  .card .thumb .badge{
+    position:absolute; top:12px; right:12px;
+    background:var(--brick); color:var(--off);
+    font-family:'Oswald',sans-serif; font-size:9px; letter-spacing:0.08em;
+    padding:4px 8px; text-transform:uppercase;
+  }
+  .card .body{padding:16px; flex:1; display:flex; flex-direction:column;}
+  .card .name{font-family:'Fraunces',serif; font-weight:600; font-size:15px; margin-bottom:8px;}
+  .card .price{font-family:'Oswald',sans-serif; font-size:12px; margin-top:auto;}
+  .card .price .now{color:var(--brick); font-weight:600;}
+
+  .t1{background:linear-gradient(155deg,#C9BEA1,#8C7E5F);}
+  .t2{background:linear-gradient(155deg,#3A3A2E,#17140F);}
+  .t3{background:linear-gradient(155deg,#9A2E1F,#4A140D);}
+  .t4{background:linear-gradient(155deg,#B9A889,#6E6248);}
+  .t5{background:linear-gradient(155deg,#4B4B37,#1E1E15);}
+  .t6{background:linear-gradient(155deg,#8C8264,#3A3A2E);}
+  .t7{background:linear-gradient(155deg,#6B2A20,#2A100B);}
+  .t8{background:linear-gradient(155deg,#D6CBAE,#A69A79);}
+  .thumb{position:relative; overflow:hidden;}
+  .thumb::before{
+    content:'';
+    position:absolute; inset:0;
+    background: repeating-linear-gradient(120deg, rgba(255,255,255,0.06) 0 2px, transparent 2px 22px);
+  }
+
+  /* ===== FOOTER ===== */
+  footer{
+    background:var(--ink); color:var(--off);
+    padding:64px 32px 28px;
+  }
+  .foot-top{
+    display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr;
+    gap:40px; padding-bottom:48px; border-bottom:1px solid rgba(247,244,236,0.14);
+  }
+  .foot-brand{font-family:'Fraunces',serif; font-size:30px; font-weight:600;}
+  .foot-brand .accent{font-style:italic; color:var(--brick);}
+  .foot-tag{font-family:'Oswald',sans-serif; font-size:11px; letter-spacing:0.1em; text-transform:uppercase; opacity:0.55; margin-top:10px;}
+  .foot-col h4{
+    font-family:'Oswald',sans-serif; font-size:11px; letter-spacing:0.12em; text-transform:uppercase;
+    opacity:0.5; margin-bottom:16px;
+  }
+  .foot-col a{
+    display:block; font-size:14px; margin-bottom:10px; opacity:0.85; transition:opacity .2s;
+  }
+  .foot-col a:hover{opacity:1;}
+  .foot-form{display:flex; margin-top:6px; border-bottom:1px solid rgba(247,244,236,0.3); padding-bottom:10px; max-width:280px;}
+  .foot-form input{
+    background:none; border:none; outline:none; color:var(--off);
+    font-family:'Inter',sans-serif; font-size:13px; flex:1;
+  }
+  .foot-form input::placeholder{color:rgba(247,244,236,0.4);}
+  .foot-form button{
+    background:none; border:none; color:var(--off); font-family:'Oswald',sans-serif;
+    font-size:11px; letter-spacing:0.1em; text-transform:uppercase; cursor:pointer;
+  }
+  .foot-bottom{
+    display:flex; justify-content:space-between; align-items:center;
+    padding-top:24px; font-family:'Oswald',sans-serif; font-size:10.5px;
+    letter-spacing:0.08em; text-transform:uppercase; opacity:0.45;
+  }
+
+  @media (max-width: 860px){
+    .hero{min-height:520px;}
+    .hero-type{font-size:clamp(44px,14vw,90px); top:20px; left:20px; right:20px;}
+    .hero-figures{height:520px; padding-top:140px;}
+    .hero-cap{left:16px; bottom:16px; max-width:78vw; padding:16px;}
+    .editorial{grid-template-columns:1fr;}
+    .grid{grid-template-columns:repeat(2,1fr);}
+    .foot-top{grid-template-columns:1fr 1fr; row-gap:32px;}
+    .masthead-row{flex-direction:column; align-items:flex-start; gap:14px;}
+    .masthead-meta{text-align:left;}
+    .topbar-center{display:none;}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .ticker-track{animation:none;}
+    html{scroll-behavior:auto;}
+    .anim{ animation:none; opacity:1; transform:none; }
+    .reveal{ transition:none; opacity:1; transform:none; }
+    .logo-mark{ transition:none; }
+  }
+
+  a:focus-visible, button:focus-visible{
+    outline:2px solid var(--brick); outline-offset:2px;
+  }
+</style>
+</head>
+<body>
+
+  <div class="topbar">
+    <div class="topbar-brand">
+      <svg class="logo-mark" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M50 6C25.7 6 6 25.7 6 50s19.7 44 44 44c11 0 21-4 28.7-10.6L69 73.7c-5.2 4-11.7 6.3-19 6.3-16.6 0-30-13.4-30-30s13.4-30 30-30c8.3 0 15.8 3.4 21.2 8.8l9.6-9.6C82.7 10.4 67.2 6 50 6z" fill="currentColor"/>
+        <path d="M50 26 27 84h13.5l4.8-12.5h19.4L70 84h13.5L61 26H50zm-1 34 8-21 8 21H49z" fill="currentColor"/>
+      </svg>
+      <div class="issue">Issue Nº 05 — Forever Classics</div>
+    </div>
+    <div class="topbar-center">
+      <a href="#shop">Shop</a>
+      <a href="#lookbook">Lookbook</a>
+      <a href="#about">About</a>
+      <a href="#new">New Drop</a>
+    </div>
+    <div class="topbar-right">
+      <a href="#">Search</a>
+      <a href="#">Account</a>
+      <a href="#">Bag (0)<span class="cart-dot"></span></a>
+    </div>
+  </div>
+
+  <div class="masthead-row">
+    <div class="masthead">AUGUST<br><span class="accent">Visum</span></div>
+    <div class="masthead-meta">
+      Fashion / Cultural / Style<br>
+      Made in Nigeria — Worldwide Shipping<br>
+      Cultural & Style Redefined
+    </div>
+  </div>
+
+  <section class="hero">
+    <div class="hero-type anim anim-d1">Forever<br>Classics</div>
+    <div class="hero-page-num anim anim-d2">Pg. 02 — Cover Story</div>
+
+    <div class="hero-figures">
+      <svg class="fig anim anim-d3" viewBox="0 0 120 420" fill="#4B4B37"><circle cx="60" cy="42" r="28"/><rect x="24" y="76" width="72" height="170" rx="20"/><rect x="27" y="238" width="27" height="150" rx="9"/><rect x="66" y="238" width="27" height="150" rx="9"/><rect x="8" y="120" width="16" height="70" rx="7"/></svg>
+      <svg class="fig anim anim-d4" viewBox="0 0 120 420" fill="#17140F"><ellipse cx="60" cy="40" rx="30" ry="20"/><circle cx="60" cy="46" r="26"/><rect x="22" y="78" width="76" height="180" rx="22"/><rect x="26" y="248" width="28" height="150" rx="9"/><rect x="66" y="248" width="28" height="150" rx="9"/></svg>
+      <svg class="fig anim anim-d5" viewBox="0 0 120 420" fill="#9A2E1F"><circle cx="60" cy="38" r="27"/><rect x="20" y="72" width="80" height="188" rx="24"/><rect x="24" y="252" width="30" height="150" rx="10"/><rect x="66" y="252" width="30" height="150" rx="10"/><rect x="82" y="150" width="30" height="42" rx="5"/></svg>
+      <svg class="fig anim anim-d6" viewBox="0 0 120 420" fill="#B9A889"><circle cx="60" cy="42" r="27"/><rect x="24" y="76" width="72" height="172" rx="20"/><rect x="27" y="240" width="27" height="150" rx="9"/><rect x="66" y="240" width="27" height="150" rx="9"/></svg>
+      <svg class="fig anim anim-d7" viewBox="0 0 120 420" fill="#6E6248"><circle cx="60" cy="44" r="26"/><rect x="26" y="78" width="68" height="162" rx="20"/><rect x="29" y="232" width="26" height="150" rx="9"/><rect x="65" y="232" width="26" height="150" rx="9"/></svg>
+    </div>
+
+    <div class="hero-cap anim anim-d7">
+      <div class="mark" style="display:flex;align-items:center;gap:8px;">
+        <svg class="logo-mark" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" width="18" height="18">
+          <path d="M50 6C25.7 6 6 25.7 6 50s19.7 44 44 44c11 0 21-4 28.7-10.6L69 73.7c-5.2 4-11.7 6.3-19 6.3-16.6 0-30-13.4-30-30s13.4-30 30-30c8.3 0 15.8 3.4 21.2 8.8l9.6-9.6C82.7 10.4 67.2 6 50 6z" fill="currentColor"/>
+          <path d="M50 26 27 84h13.5l4.8-12.5h19.4L70 84h13.5L61 26H50zm-1 34 8-21 8 21H49z" fill="currentColor"/>
+        </svg>
+        <span>August <span style="color:var(--brick);">Visum</span></span>
+      </div>
+      <div class="title">Baseline 01</div>
+      <div class="desc">Designed for the modern wardrobe. Built on culture, raw texture, and oversized proportion — August Visum presents the Forever Classics edit.</div>
+      <div class="cta-row">
+        <a href="#shop" class="btn-primary">Shop the Edit</a>
+        <a href="#lookbook" class="btn-ghost">Lookbook</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="ticker">
+    <div class="ticker-track">
+      <span>Forever Classics</span><span class="dot">·</span>
+      <span>New Drop — Baseline 01</span><span class="dot">·</span>
+      <span>Made in Nigeria</span><span class="dot">·</span>
+      <span>Limited Stock, On to Order</span><span class="dot">·</span>
+      <span>Worldwide Shipping</span><span class="dot">·</span>
+      <span>Forever Classics</span><span class="dot">·</span>
+      <span>New Drop — Baseline 01</span><span class="dot">·</span>
+      <span>Made in Nigeria</span><span class="dot">·</span>
+      <span>Limited Stock, On to Order</span><span class="dot">·</span>
+      <span>Worldwide Shipping</span><span class="dot">·</span>
+    </div>
+  </div>
+
+  <section class="section" id="shop">
+    <div class="contents-header reveal">
+      <span class="num">01</span>
+      <h2>Shop the Look</h2>
+      <span class="leader"></span>
+      <span class="tag">Bundle Edits</span>
+    </div>
+    <div class="rail">
+      <div class="rail-card reveal">
+        <div class="swatch c1"><span class="pg">Pg. 03</span></div>
+        <div class="info">
+          <div class="name">Overshirt & Cargo Set</div>
+          <div class="price-row"><span class="now">₦39,999</span><span class="was">₦50,000</span></div>
+          <div class="meta">Limited Stock · Made to Order</div>
+        </div>
+      </div>
+      <div class="rail-card reveal">
+        <div class="swatch c2"><span class="pg">Pg. 04</span></div>
+        <div class="info">
+          <div class="name">Baseline Crew & Cargo</div>
+          <div class="price-row"><span class="now">₦34,999</span><span class="was">₦45,000</span></div>
+          <div class="meta">Limited Stock · Made to Order</div>
+        </div>
+      </div>
+      <div class="rail-card reveal">
+        <div class="swatch c3"><span class="pg">Pg. 05</span></div>
+        <div class="info">
+          <div class="name">Checkered Shirt Set</div>
+          <div class="price-row"><span class="now">₦29,999</span><span class="was">₦40,000</span></div>
+          <div class="meta">Limited Stock · Made to Order</div>
+        </div>
+      </div>
+      <div class="rail-card reveal">
+        <div class="swatch c4"><span class="pg">Pg. 06</span></div>
+        <div class="info">
+          <div class="name">Field Jacket Fit</div>
+          <div class="price-row"><span class="now">₦39,999</span><span class="was">₦50,000</span></div>
+          <div class="meta">Limited Stock · Made to Order</div>
+        </div>
+      </div>
+      <div class="rail-card reveal">
+        <div class="swatch c5"><span class="pg">Pg. 07</span></div>
+        <div class="info">
+          <div class="name">Utility Vest & Trouser</div>
+          <div class="price-row"><span class="now">₦39,999</span><span class="was">₦50,000</span></div>
+          <div class="meta">Limited Stock · Made to Order</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="editorial" id="lookbook">
+    <div class="editorial-img reveal">
+      <div class="cap">
+        <span>Pg. 08 — Editorial</span>
+        <span>Shot on Location</span>
+      </div>
+    </div>
+    <div class="editorial-text reveal">
+      <div class="eyebrow">The Vision</div>
+      <h3>To build a world where <em>expression</em> has no limits.</h3>
+      <p>August Visum started as a dream and a sketchbook. One year on, it's a standard — oversized silhouettes, hand-finished detail, and pieces designed to be worn until they're part of the story. This is fashion built on culture, not trend.</p>
+      <a href="#about" class="btn-ghost">Read the Full Story</a>
+    </div>
+  </section>
+
+  <section class="section" id="new">
+    <div class="contents-header reveal">
+      <span class="num">02</span>
+      <h2>New Drop — Baseline 01</h2>
+      <span class="leader"></span>
+      <span class="tag">8 Pieces</span>
+    </div>
+    <div class="grid">
+      <div class="card reveal">
+        <div class="thumb t1"><span class="pg">Pg. 09</span><span class="badge">New</span></div>
+        <div class="body"><div class="name">Baseline 01 White LS</div><div class="price"><span class="now">₦24,999</span></div></div>
+      </div>
+      <div class="card reveal">
+        <div class="thumb t2"><span class="pg">Pg. 10</span></div>
+        <div class="body"><div class="name">Iceman Graphic Tee</div><div class="price"><span class="now">₦34,999</span></div></div>
+      </div>
+      <div class="card reveal">
+        <div class="thumb t3"><span class="pg">Pg. 11</span><span class="badge">Sale</span></div>
+        <div class="body"><div class="name">Luxurious Checkered Shirt</div><div class="price"><span class="now">₦29,999</span></div></div>
+      </div>
+      <div class="card reveal">
+        <div class="thumb t4"><span class="pg">Pg. 12</span></div>
+        <div class="body"><div class="name">Dune Fit Two Piece</div><div class="price"><span class="now">₦39,999</span></div></div>
+      </div>
+      <div class="card reveal">
+        <div class="thumb t5"><span class="pg">Pg. 13</span></div>
+        <div class="body"><div class="name">Shadow Pixel Denim Set</div><div class="price"><span class="now">₦45,999</span></div></div>
+      </div>
+      <div class="card reveal">
+        <div class="thumb t6"><span class="pg">Pg. 14</span></div>
+        <div class="body"><div class="name">Trucker Cap — Stone</div><div class="price"><span class="now">₦14,999</span></div></div>
+      </div>
+      <div class="card reveal">
+        <div class="thumb t7"><span class="pg">Pg. 15</span><span class="badge">Sale</span></div>
+        <div class="body"><div class="name">Flame Panel Cargo</div><div class="price"><span class="now">₦34,999</span></div></div>
+      </div>
+      <div class="card reveal">
+        <div class="thumb t8"><span class="pg">Pg. 16</span></div>
+        <div class="body"><div class="name">Multi-Pocket Vest</div><div class="price"><span class="now">₦39,999</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <footer id="about">
+    <div class="foot-top">
+      <div>
+        <div class="foot-brand">August <span class="accent">Visum</span></div>
+        <div class="foot-tag">Forever Classics — Fashion / Cultural / Style</div>
+        <div class="foot-form">
+          <input type="email" placeholder="Join the mailing list">
+          <button type="button">Subscribe</button>
+        </div>
+      </div>
+      <div class="foot-col">
+        <h4>Shop</h4>
+        <a href="#">New Drop</a>
+        <a href="#">Shirts</a>
+        <a href="#">Bottoms</a>
+        <a href="#">Headwear</a>
+      </div>
+      <div class="foot-col">
+        <h4>Brand</h4>
+        <a href="#">About</a>
+        <a href="#">Lookbook</a>
+        <a href="#">Our Story</a>
+        <a href="#">Contact</a>
+      </div>
+      <div class="foot-col">
+        <h4>Support</h4>
+        <a href="#">Shipping</a>
+        <a href="#">Returns</a>
+        <a href="#">Size Guide</a>
+        <a href="#">Instagram</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 August Visum — All Rights Reserved</span>
+      <span>Issue Nº 05 · Made in Nigeria</span>
+    </div>
+  </footer>
+
+  <script>
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((entry, i) => {
+          if (entry.isIntersecting) {
+            setTimeout(() => entry.target.classList.add('in-view'), i * 60);
+            io.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+      document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+    } else {
+      document.querySelectorAll('.reveal').forEach(el => el.classList.add('in-view'));
+    }
+  </script>
+</body>
+</html>
