@@ -24,12 +24,21 @@ export const useAuthStore = create((set) => {
       set({ loading: true, error: null });
       try {
         const response = await authService.loginUser(credentials);
+<<<<<<< HEAD
         const { user, accessToken } = response.data;
 
         localStorage.setItem("agt_user_token", accessToken);
         localStorage.setItem("agt_user_profile", JSON.stringify(user));
 
         set({ user, token: accessToken, isAuthenticated: true });
+=======
+        const { user, token } = response.data;
+
+        localStorage.setItem("agt_user_token", token);
+        localStorage.setItem("agt_user_profile", JSON.stringify(user));
+
+        set({ user, token, isAuthenticated: true });
+>>>>>>> ce65e719d0981a8d076d457c267585acfea34ba2
         return { success: true };
       } catch (err) {
         const message = err.response?.data?.message || "Invalid credentials.";
@@ -44,12 +53,21 @@ export const useAuthStore = create((set) => {
       set({ loading: true, error: null });
       try {
         const response = await authService.registerUser(payload);
+<<<<<<< HEAD
         const { user, accessToken } = response.data;
 
         localStorage.setItem("agt_user_token", accessToken);
         localStorage.setItem("agt_user_profile", JSON.stringify(user));
 
         set({ user, token: accessToken, isAuthenticated: true });
+=======
+        const { user, token } = response.data;
+
+        localStorage.setItem("agt_user_token", token);
+        localStorage.setItem("agt_user_profile", JSON.stringify(user));
+
+        set({ user, token, isAuthenticated: true });
+>>>>>>> ce65e719d0981a8d076d457c267585acfea34ba2
         return { success: true };
       } catch (err) {
         const message = err.response?.data?.message || "Registration failed.";

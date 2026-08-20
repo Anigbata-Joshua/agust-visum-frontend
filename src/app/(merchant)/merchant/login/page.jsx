@@ -78,7 +78,11 @@ export default function MerchantLoginPage() {
             : "Register your brand, list catalogs, and configure your public collection storefront."}
         </p>
 
+<<<<<<< HEAD
         {/* /* Form Container */}
+=======
+        {/* Form Container */}
+>>>>>>> ce65e719d0981a8d076d457c267585acfea34ba2
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           {!isLogin && (
             <>

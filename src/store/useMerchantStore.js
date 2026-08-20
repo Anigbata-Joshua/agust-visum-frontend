@@ -24,12 +24,21 @@ export const useMerchantStore = create((set) => {
       set({ loading: true, error: null });
       try {
         const response = await authService.loginMerchant(credentials);
+<<<<<<< HEAD
         const { merchant, accessToken } = response.data;
 
         localStorage.setItem("agt_merchant_token", accessToken);
         localStorage.setItem("agt_merchant_profile", JSON.stringify(merchant));
 
         set({ merchant, token: accessToken, isAuthenticated: true });
+=======
+        const { merchant, token } = response.data;
+
+        localStorage.setItem("agt_merchant_token", token);
+        localStorage.setItem("agt_merchant_profile", JSON.stringify(merchant));
+
+        set({ merchant, token, isAuthenticated: true });
+>>>>>>> ce65e719d0981a8d076d457c267585acfea34ba2
         return { success: true };
       } catch (err) {
         const message = err.response?.data?.message || "Invalid credentials.";
@@ -44,12 +53,21 @@ export const useMerchantStore = create((set) => {
       set({ loading: true, error: null });
       try {
         const response = await authService.registerMerchant(payload);
+<<<<<<< HEAD
         const { merchant, accessToken } = response.data;
 
         localStorage.setItem("agt_merchant_token", accessToken);
         localStorage.setItem("agt_merchant_profile", JSON.stringify(merchant));
 
         set({ merchant, token: accessToken, isAuthenticated: true });
+=======
+        const { merchant, token } = response.data;
+
+        localStorage.setItem("agt_merchant_token", token);
+        localStorage.setItem("agt_merchant_profile", JSON.stringify(merchant));
+
+        set({ merchant, token, isAuthenticated: true });
+>>>>>>> ce65e719d0981a8d076d457c267585acfea34ba2
         return { success: true };
       } catch (err) {
         const message = err.response?.data?.message || "Registration failed.";
