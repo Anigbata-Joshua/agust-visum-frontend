@@ -23,13 +23,13 @@ export function EditorialSplit({
   return (
     <section className={cn("py-16 sm:py-24", className)}>
       <Container size="wide">
-        <div
-          className={cn(
-            "grid gap-10 lg:gap-16 items-center lg:grid-cols-12",
-            reverse && "lg:[&>div:first-child]:order-2"
-          )}
-        >
-          <FadeIn className="lg:col-span-6">
+        <div className="grid gap-10 lg:gap-12 items-center lg:grid-cols-12">
+          <FadeIn
+            className={cn(
+              "lg:col-span-6",
+              reverse ? "lg:col-start-7" : "lg:col-start-1"
+            )}
+          >
             <div className="relative aspect-[4/5] overflow-hidden bg-stone">
               <div
                 className="absolute inset-0 bg-cover bg-center transition-transform duration-700 hover:scale-105"
@@ -40,7 +40,13 @@ export function EditorialSplit({
             </div>
           </FadeIn>
 
-          <FadeIn delay={0.1} className="lg:col-span-5 lg:col-start-8">
+          <FadeIn
+            delay={0.1}
+            className={cn(
+              "lg:col-span-5",
+              reverse ? "lg:col-start-1" : "lg:col-start-8"
+            )}
+          >
             <span className="font-cond text-[11px] tracking-[0.22em] uppercase text-brick">
               {kicker}
             </span>

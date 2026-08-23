@@ -1,5 +1,3 @@
-"use client";
-
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Container } from "@/components/ui/Container";
@@ -211,15 +209,6 @@ export default function AboutPage() {
               </Link>
             </div>
           </FadeUp>
-        </Container>
-      </section>
-
-      {/* Footnote */}
-      <section className="py-12 border-t border-ink/10">
-        <Container size="wide" className="text-center">
-          <p className="font-cond text-[11px] tracking-[0.22em] uppercase text-ink/50">
-            © August Visum — Established 2019
-          </p>
         </Container>
       </section>
     </main>

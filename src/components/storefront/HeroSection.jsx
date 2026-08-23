@@ -27,7 +27,7 @@ export function HeroSection() {
       aria-label="Forever Classics — hero"
       className="relative w-full overflow-hidden bg-off"
     >
-      <div className="max-w-[1440px] mx-auto grid lg:grid-cols-12 gap-0 lg:gap-8 min-h-[78svh] lg:min-h-[82svh]">
+      <div className="grid lg:grid-cols-12 gap-0 lg:gap-8 min-h-[78svh] lg:min-h-[82svh]">
         {/* Image layer — fills the entire left half of the section, with a
             gentle hover scale to add editorial weight without distracting. */}
         <div className="group relative lg:col-span-7 h-[58svh] sm:h-[64svh] lg:h-full overflow-hidden">

@@ -2,22 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
+/*
+ * Color tokens are RGB triples (e.g. "23 20 15", not "#17140F") so Tailwind's
+ * `rgb(var(--x) / <alpha-value>)` pattern in tailwind.config.js can compose
+ * them with ANY opacity modifier automatically — text-ink/10 through
+ * text-ink/95, bg-brick/[0.37], border-off/20, all of it — without needing a
+ * manual override per value per theme. Previously each opacity variant had
+ * to be hand-listed in this file per theme, and any variant not listed fell
+ * back to a hardcoded light-mode hex, which is why text/borders would go
+ * missing or read wrong depending on theme. This is the fix.
+ */
+
 :root,
 [data-theme="light"] {
-  --ink: #17140F;
-  --paper: #EAE3D3;
-  --off: #F7F4EC;
-  --olive: #4B4B37;
-  --brick: #9A2E1F;
-  --stone: #B9A889;
-  --line: rgba(23, 20, 15, 0.16);
-  /* Surfaces used by the storefront theme tokens. */
-  --surface: var(--paper);
-  --surface-muted: var(--off);
-  --surface-elevated: #F2EBD9;
-  --foreground: var(--ink);
-  --foreground-muted: rgba(23, 20, 15, 0.65);
-  --border: rgba(23, 20, 15, 0.12);
+  --ink: 23 20 15;       /* #17140F */
+  --paper: 234 227 211;  /* #EAE3D3 */
+  --off: 247 244 236;    /* #F7F4EC */
+  --olive: 75 75 55;     /* #4B4B37 */
+  --brick: 154 46 31;    /* #9A2E1F */
+  --stone: 185 168 137;  /* #B9A889 */
+  --line: 23 20 15;
   color-scheme: light;
 }
 
@@ -25,87 +29,45 @@
    but invert the surfaces. The merchant deck has always been
    dark-on-ink, so this just makes the whole app consistent. */
 [data-theme="dark"] {
-  --ink: #F7F4EC;
-  --paper: #0E0C09;
-  --off: #17140F;
-  --olive: #B9A889;
-  --brick: #C95A47;
-  --stone: #3B3327;
-  --line: rgba(247, 244, 236, 0.14);
-  --surface: #0E0C09;
-  --surface-muted: #17140F;
-  --surface-elevated: #1F1B14;
-  --foreground: #F7F4EC;
-  --foreground-muted: rgba(247, 244, 236, 0.65);
-  --border: rgba(247, 244, 236, 0.14);
+  --ink: 247 244 236;    /* #F7F4EC */
+  --paper: 14 12 9;      /* #0E0C09 */
+  --off: 23 20 15;       /* #17140F */
+  --olive: 185 168 137;  /* #B9A889 */
+  --brick: 201 90 71;    /* #C95A47 */
+  --stone: 59 51 39;     /* #3B3327 */
+  --line: 247 244 236;
+  color-scheme: dark;
+}
+
+/* ----------------------------------------------------------------- *
+ * Merchant dashboard is pinned to a fixed dark surface regardless of
+ * the site-wide light/dark theme toggle. Overriding the tokens here —
+ * rather than relying on [data-theme="dark"] — means bg-ink/text-off/etc
+ * always resolve to these fixed dark values in the merchant deck, even
+ * when the rest of the site is in light mode (or dark mode, which
+ * otherwise flips --ink to a light color and breaks this exact scope).
+ * ----------------------------------------------------------------- */
+[data-surface="merchant-dark"] {
+  --ink: 28 28 30;      /* #1C1C1E */
+  --off: 247 244 236;   /* #F7F4EC */
+  --paper: 14 12 9;     /* #0E0C09 */
+  --stone: 59 51 39;    /* #3B3327 */
+  --brick: 201 90 71;   /* #C95A47 */
+  --olive: 185 168 137; /* #B9A889 */
+  --line: 247 244 236;
   color-scheme: dark;
 }
 
 html {
   scroll-behavior: smooth;
-  background-color: var(--paper);
+  background-color: rgb(var(--paper));
 }
 
 body {
-  background: var(--paper);
-  color: var(--ink);
+  background: rgb(var(--paper));
+  color: rgb(var(--ink));
   transition: background-color .25s ease, color .25s ease;
 }
-
-/* Tailwind token aliasing so any `bg-paper` / `text-ink` rule flips
-   with the theme without us having to rewrite every component. The
-   tokens are bound via custom utilities in @layer below. */
-@layer utilities {
-  .bg-paper { background-color: var(--paper); }
-  .bg-off { background-color: var(--off); }
-  .bg-stone { background-color: var(--stone); }
-  .bg-ink { background-color: var(--ink); }
-  .bg-brick { background-color: var(--brick); }
-  .text-ink { color: var(--ink); }
-  .text-off { color: var(--off); }
-  .text-brick { color: var(--brick); }
-  .text-olive { color: var(--olive); }
-  .text-stone { color: var(--stone); }
-  .border-ink\/10 { border-color: rgba(247,244,236,0.10); }
-  .border-ink\/15 { border-color: rgba(247,244,236,0.15); }
-  .border-ink\/20 { border-color: rgba(247,244,236,0.20); }
-}
-
-[data-theme="light"] .border-ink\/10 { border-color: rgba(23,20,15,0.10); }
-[data-theme="light"] .border-ink\/15 { border-color: rgba(23,20,15,0.15); }
-[data-theme="light"] .border-ink\/20 { border-color: rgba(23,20,15,0.20); }
-
-/* Soften some common foreground-opacity utilities so they read on dark. */
-[data-theme="dark"] .text-ink\/60 { color: rgba(247,244,236,0.60); }
-[data-theme="dark"] .text-ink\/55 { color: rgba(247,244,236,0.55); }
-[data-theme="dark"] .text-ink\/50 { color: rgba(247,244,236,0.50); }
-[data-theme="dark"] .text-ink\/40 { color: rgba(247,244,236,0.40); }
-[data-theme="dark"] .bg-ink\/5 { background-color: rgba(247,244,236,0.05); }
-[data-theme="dark"] .bg-ink\/10 { background-color: rgba(247,244,236,0.10); }
-[data-theme="dark"] .bg-ink\/15 { background-color: rgba(247,244,236,0.15); }
-[data-theme="dark"] .bg-ink\/20 { background-color: rgba(247,244,236,0.20); }
-[data-theme="dark"] .border-off\/10 { border-color: rgba(247,244,236,0.10); }
-[data-theme="dark"] .border-off\/15 { border-color: rgba(247,244,236,0.15); }
-[data-theme="dark"] .border-off\/20 { border-color: rgba(247,244,236,0.20); }
-[data-theme="dark"] .border-off\/30 { border-color: rgba(247,244,236,0.30); }
-[data-theme="dark"] .text-off\/60 { color: rgba(247,244,236,0.60); }
-[data-theme="dark"] .text-off\/70 { color: rgba(247,244,236,0.70); }
-[data-theme="dark"] .text-off\/50 { color: rgba(247,244,236,0.50); }
-[data-theme="dark"] .text-off\/40 { color: rgba(247,244,236,0.40); }
-[data-theme="dark"] .bg-off\/5 { background-color: rgba(247,244,236,0.05); }
-[data-theme="dark"] .bg-off\/10 { background-color: rgba(247,244,236,0.10); }
-[data-theme="dark"] .bg-off\/20 { background-color: rgba(247,244,236,0.20); }
-[data-theme="dark"] .bg-off\/30 { background-color: rgba(247,244,236,0.30); }
-[data-theme="dark"] .bg-off\/40 { background-color: rgba(247,244,236,0.40); }
-[data-theme="dark"] .bg-paper\/85 { background-color: rgba(14,12,9,0.85); }
-[data-theme="dark"] .bg-paper\/90 { background-color: rgba(14,12,9,0.90); }
-
-[data-theme="light"] .text-off\/60 { color: rgba(23,20,15,0.60); }
-[data-theme="light"] .text-off\/70 { color: rgba(23,20,15,0.70); }
-[data-theme="light"] .text-off\/50 { color: rgba(23,20,15,0.50); }
-[data-theme="light"] .text-off\/40 { color: rgba(23,20,15,0.40); }
-[data-theme="light"] .bg-paper\/85 { background-color: rgba(234,227,211,0.85); }
-[data-theme="light"] .bg-paper\/90 { background-color: rgba(234,227,211,0.90); }
 
 .reveal {
   opacity: 0;
@@ -121,23 +83,3 @@ body {
   html { scroll-behavior: auto; }
   .reveal { opacity: 1; transform: none; transition: none; }
 }
-
-/* ----------------------------------------------------------------- *
- * Merchant dashboard is pinned to a fixed dark surface regardless of
- * the site-wide light/dark theme toggle. Overriding the tokens here —
- * rather than relying on [data-theme="dark"] — means bg-ink/text-off/etc
- * always resolve to these fixed dark values in the merchant deck, even
- * when the rest of the site is in light mode (or dark mode, which
- * otherwise flips --ink to a light color and breaks this exact scope).
- * ----------------------------------------------------------------- */
-[data-surface="merchant-dark"] {
-  --ink: #1C1C1E;
-  --off: #F7F4EC;
-  --paper: #0E0C09;
-  --stone: #3B3327;
-  --brick: #C95A47;
-  --olive: #B9A889;
-  --line: rgba(247, 244, 236, 0.14);
-  color-scheme: dark;
-}
-

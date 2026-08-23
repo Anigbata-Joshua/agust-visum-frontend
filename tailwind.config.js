@@ -4,12 +4,12 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        ink: "#17140F",
-        paper: "#EAE3D3",
-        off: "#F7F4EC",
-        olive: "#4B4B37",
-        brick: "#9A2E1F",
-        stone: "#B9A889",
+        ink: "rgb(var(--ink) / <alpha-value>)",
+        paper: "rgb(var(--paper) / <alpha-value>)",
+        off: "rgb(var(--off) / <alpha-value>)",
+        olive: "rgb(var(--olive) / <alpha-value>)",
+        brick: "rgb(var(--brick) / <alpha-value>)",
+        stone: "rgb(var(--stone) / <alpha-value>)",
       },
       fontFamily: {
         display: ["var(--font-display)", "serif"],

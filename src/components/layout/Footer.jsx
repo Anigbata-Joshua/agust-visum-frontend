@@ -66,7 +66,7 @@ export function Footer() {
   };
 
   return (
-    <footer className="mt-20 border-t border-ink/10 bg-off text-ink">
+    <footer className="border-t border-ink/10 bg-off text-ink">
       <div className="max-w-[1440px] mx-auto px-5 sm:px-6 lg:px-10 py-14 lg:py-20">
         <div className="grid gap-12 lg:gap-16 lg:grid-cols-12">
           {/* Brand block */}
