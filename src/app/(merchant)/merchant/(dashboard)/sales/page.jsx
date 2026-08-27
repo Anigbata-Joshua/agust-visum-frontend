@@ -10,7 +10,7 @@ import { Skeleton, StatCardSkeleton } from "@/components/ui/Skeleton";
 import { FadeIn, StaggerGrid, StaggerItem } from "@/components/ui/Motion";
 import { toast } from "sonner";
 
-const STATUS_OPTIONS = ["pending", "paid", "shipped", "completed", "cancelled"];
+const STATUS_OPTIONS = ["paid", "cancelled"];
 
 export default function MerchantSalesPage() {
   const [sales, setSales] = useState([]);
