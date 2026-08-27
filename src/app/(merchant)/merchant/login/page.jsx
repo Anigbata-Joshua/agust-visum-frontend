@@ -48,6 +48,7 @@ function MerchantLoginForm() {
       } else {
         toast.error(res.error || "Authentication failed.");
       }
+      
     } else {
       const res = await onboarding({
         full_name: data.name,
@@ -69,8 +70,8 @@ function MerchantLoginForm() {
   };
 
   return (
-<main data-surface="merchant-dark" className="min-h-screen bg-ink flex flex-col justify-center items-center px-4 py-16 text-off">
-        {/* Editorial Card Outer Frame - Dark mode */}
+    <main data-surface="merchant-dark" className="min-h-screen bg-ink flex flex-col justify-center items-center px-4 py-16 text-off">
+      {/* Editorial Card Outer Frame - Dark mode */}
       <div className="w-full max-w-[440px] bg-ink border border-off/14 p-8 shadow-2xl relative">
         {/* Editorial Header Details */}
         <div className="flex justify-between items-baseline border-b border-off/10 pb-4 mb-6">

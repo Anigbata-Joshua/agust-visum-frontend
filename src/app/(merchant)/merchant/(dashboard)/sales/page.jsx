@@ -10,7 +10,7 @@ import { Skeleton, StatCardSkeleton } from "@/components/ui/Skeleton";
 import { FadeIn, StaggerGrid, StaggerItem } from "@/components/ui/Motion";
 import { toast } from "sonner";
 
-const STATUS_OPTIONS = ["paid", "cancelled"];
+const STATUS_OPTIONS = ["pending", "paid", "cancelled"];
 
 export default function MerchantSalesPage() {
   const [sales, setSales] = useState([]);
@@ -50,6 +50,7 @@ export default function MerchantSalesPage() {
         prev.map((s) => (s.order_id === orderId ? { ...s, status: newStatus } : s))
       );
       toast.success("Order status updated.");
+
     } catch (err) {
       toast.error(err.response?.data?.message || "Could not update status.");
     } finally {
