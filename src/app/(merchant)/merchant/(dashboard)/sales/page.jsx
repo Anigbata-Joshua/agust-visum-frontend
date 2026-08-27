@@ -41,6 +41,15 @@ export default function MerchantSalesPage() {
     // schema — selecting it back should just be a no-op.
     if (newStatus === "pending") return;
 
+    // Guard against re-selecting the status the order is already on —
+    // status lives on the whole Order, not per line item, so we look it
+    // up from any sale row matching this orderId.
+    const currentStatus = sales.find((s) => s.order_id === orderId)?.status;
+    if (newStatus === currentStatus) {
+      toast.error(`This order is already set to ${newStatus}.`);
+      return;
+    }
+
     setUpdatingOrderId(orderId);
     try {
       await salesService.updateOrderStatus(orderId, newStatus);
@@ -50,7 +59,6 @@ export default function MerchantSalesPage() {
         prev.map((s) => (s.order_id === orderId ? { ...s, status: newStatus } : s))
       );
       toast.success("Order status updated.");
-
     } catch (err) {
       toast.error(err.response?.data?.message || "Could not update status.");
     } finally {
