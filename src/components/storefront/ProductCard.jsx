@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { Heart, Plus, ShoppingBag } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -14,16 +15,6 @@ import { socialService } from "@/services/social.service";
 import { memoGet } from "@/lib/cache";
 import { toast } from "sonner";
 
-/**
- * ProductCard — full editorial treatment:
- *  - hover image zoom + secondary-image crossfade (if available)
- *  - quick-add button (icon) on hover, with single-merchant
- *    enforcement baked in via `useAddToCart`
- *  - wishlist toggle (heart) using socialService.like / unlike
- *  - rating summary (if present on payload)
- *  - badge slot for "New" / "Sold out" / etc.
- *  - loading skeleton variant via the `loading` prop
- */
 export function ProductCard({ product, loading = false, priority = false }) {
   const { user, isAuthenticated } = useAuthStore();
   const { addToCart, confirmAdd, cancelAdd, pendingConfirm, busy } =
@@ -48,9 +39,7 @@ export function ProductCard({ product, loading = false, priority = false }) {
   useEffect(() => {
     if (!id) return;
     let cancelled = false;
-    // Memoized across all cards on the page — first ProductCard to mount
-    // fires the request; every other card awaiting the same id resolves
-    // from the same promise.
+    
     memoGet(`likes:${id}`, () => socialService.getLikes(id), { ttl: 60_000 })
       .then((res) => {
         if (cancelled) return;
@@ -119,24 +108,27 @@ export function ProductCard({ product, loading = false, priority = false }) {
         className="relative block aspect-[3/4] bg-stone overflow-hidden"
       >
         {primary && (
-          <img
+          <Image
             src={primary}
             alt={title}
-            loading={priority ? "eager" : "lazy"}
+            fill
+            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+            priority={priority}
             className={cn(
-              "absolute inset-0 w-full h-full object-cover transition-all duration-500",
+              "object-cover transition-all duration-500",
               hovered ? "scale-105" : "scale-100"
             )}
           />
         )}
         {secondary && (
-          <img
+          <Image
             src={secondary}
             alt=""
             aria-hidden
-            loading="lazy"
+            fill
+            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
             className={cn(
-              "absolute inset-0 w-full h-full object-cover transition-opacity duration-500",
+              "object-cover transition-opacity duration-500",
               hovered ? "opacity-100" : "opacity-0"
             )}
           />

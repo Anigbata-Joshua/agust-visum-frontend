@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
@@ -171,12 +172,13 @@ export default function AboutPage() {
       <section className="py-16 sm:py-24 border-t border-ink/10 bg-off">
         <Container size="wide" className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
           <FadeIn>
-            <div className="aspect-[4/5] bg-stone overflow-hidden">
-              <img
+            <div className="relative aspect-[4/5] bg-stone overflow-hidden">
+              <Image
                 src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=1400&q=80"
                 alt="Studio detail"
-                loading="lazy"
-                className="w-full h-full object-cover"
+                fill
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                className="object-cover"
               />
             </div>
           </FadeIn>

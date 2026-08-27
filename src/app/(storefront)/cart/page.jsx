@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Minus, Plus, X, ShoppingBag, ArrowRight, Trash2 } from "lucide-react";
@@ -221,9 +222,11 @@ export default function CartPage() {
                         className="shrink-0 block w-24 h-32 sm:w-28 sm:h-36 bg-stone overflow-hidden"
                       >
                         {item.product?.images?.[0] && (
-                          <img
+                          <Image
                             src={item.product.images[0]}
-                            alt={item.product?.title}
+                            alt={item.product?.title || ""}
+                            width={112}
+                            height={144}
                             className="w-full h-full object-cover"
                           />
                         )}

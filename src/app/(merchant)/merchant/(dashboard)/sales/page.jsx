@@ -8,38 +8,74 @@ import { DataTable } from "@/components/merchant/DataTable";
 import { StatCard } from "@/components/merchant/StatCard";
 import { Skeleton, StatCardSkeleton } from "@/components/ui/Skeleton";
 import { FadeIn, StaggerGrid, StaggerItem } from "@/components/ui/Motion";
+import { toast } from "sonner";
+
+const STATUS_OPTIONS = ["pending", "paid", "shipped", "completed", "cancelled"];
 
 export default function MerchantSalesPage() {
   const [sales, setSales] = useState([]);
   const [totalRevenue, setTotalRevenue] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [updatingOrderId, setUpdatingOrderId] = useState(null);
 
-  useEffect(() => {
-    let cancelled = false;
+  const loadSales = () => {
     salesService
       .getAnalytics()
       .then((res) => {
-        if (cancelled) return;
         setSales(res.data?.sales ?? []);
         setTotalRevenue(res.data?.total_revenue ?? 0);
       })
       .catch((err) => {
-        if (!cancelled) setError(err.response?.data?.message || "Could not load sales.");
+        setError(err.response?.data?.message || "Could not load sales.");
       })
-      .finally(() => {
-        if (!cancelled) setLoading(false);
-      });
-    return () => {
-      cancelled = true;
-    };
+      .finally(() => setLoading(false));
+  };
+
+  useEffect(() => {
+    loadSales();
   }, []);
+
+  const handleStatusChange = async (orderId, newStatus) => {
+    // 'pending' is the default state, not a valid target per the backend
+    // schema — selecting it back should just be a no-op.
+    if (newStatus === "pending") return;
+
+    setUpdatingOrderId(orderId);
+    try {
+      await salesService.updateOrderStatus(orderId, newStatus);
+      // Update every line item that belongs to this order, since status
+      // lives on the whole Order, not per line item.
+      setSales((prev) =>
+        prev.map((s) => (s.order_id === orderId ? { ...s, status: newStatus } : s))
+      );
+      toast.success("Order status updated.");
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Could not update status.");
+    } finally {
+      setUpdatingOrderId(null);
+    }
+  };
 
   const rows = sales.map((s) => ({
     Product: s.title || s.product?.title || "—",
     Quantity: s.quantity ?? 1,
     Total: formatNaira(s.line_total ?? s.total ?? 0),
     Date: s.created_at ? new Date(s.created_at).toLocaleDateString() : "—",
+    Status: (
+      <select
+        value={s.status || "pending"}
+        disabled={updatingOrderId === s.order_id}
+        onChange={(e) => handleStatusChange(s.order_id, e.target.value)}
+        className="bg-ink border border-off/20 px-2 py-1.5 text-xs outline-none focus:border-brick disabled:opacity-50 capitalize"
+      >
+        {STATUS_OPTIONS.map((opt) => (
+          <option key={opt} value={opt} disabled={opt === "pending"}>
+            {opt}
+          </option>
+        ))}
+      </select>
+    ),
   }));
 
   const orderCount = sales.length;
@@ -105,7 +141,7 @@ export default function MerchantSalesPage() {
               No sales recorded yet.
             </p>
           ) : (
-            <DataTable columns={["Product", "Quantity", "Total", "Date"]} rows={rows} />
+            <DataTable columns={["Product", "Quantity", "Total", "Date", "Status"]} rows={rows} />
           )}
         </div>
       </FadeIn>

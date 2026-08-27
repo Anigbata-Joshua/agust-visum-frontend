@@ -2,6 +2,7 @@
 
 import { use, useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { Heart, ShoppingBag, ChevronLeft, ChevronRight, Truck, RefreshCcw, Shield } from "lucide-react";
 import { productService } from "@/services/product.service";
@@ -17,6 +18,11 @@ import { Badge } from "@/components/ui/Badge";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { Skeleton, ProductGridSkeleton } from "@/components/ui/Skeleton";
 import { toast } from "sonner";
+
+// next/image forwards refs, so framer-motion can animate it directly —
+// this replaces the old motion.img crossfade with an optimized image
+// while keeping the same enter/exit transition.
+const MotionImage = motion(Image);
 
 export default function ProductDetailPage({ params }) {
   const { id } = use(params);
@@ -270,15 +276,18 @@ export default function ProductDetailPage({ params }) {
             <div className="relative aspect-[3/4] bg-stone overflow-hidden">
               {hasGallery ? (
                 <AnimatePresence mode="wait">
-                  <motion.img
+                  <MotionImage
                     key={images[galleryIndex]}
                     src={images[galleryIndex]}
                     alt={product.title}
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 58vw"
+                    priority
                     initial={{ opacity: 0, scale: 1.02 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.4 }}
-                    className="absolute inset-0 w-full h-full object-cover"
+                    className="object-cover"
                   />
                 </AnimatePresence>
               ) : (
@@ -319,12 +328,12 @@ export default function ProductDetailPage({ params }) {
                     key={i}
                     onClick={() => setGalleryIndex(i)}
                     className={cn(
-                      "aspect-square bg-stone overflow-hidden border-2 transition-colors",
+                      "relative aspect-square bg-stone overflow-hidden border-2 transition-colors",
                       i === galleryIndex ? "border-ink" : "border-transparent opacity-70 hover:opacity-100"
                     )}
                     aria-label={`Image ${i + 1}`}
                   >
-                    <img src={img} alt="" className="w-full h-full object-cover" />
+                    <Image src={img} alt="" fill sizes="80px" className="object-cover" />
                   </button>
                 ))}
               </div>

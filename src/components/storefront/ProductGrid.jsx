@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { productService } from "@/services/product.service";
+import { memoGet } from "@/lib/cache";
 import { ProductCard } from "@/components/storefront/ProductCard";
 import { Container } from "@/components/ui/Container";
 import { StaggerGrid, StaggerItem } from "@/components/ui/Motion";
@@ -30,8 +31,11 @@ export function ProductGrid({
     let cancelled = false;
     setLoading(true);
     setError(null);
-    productService
-      .list(fetchParams)
+    memoGet(
+      `products:${JSON.stringify(fetchParams)}`,
+      () => productService.list(fetchParams),
+      { ttl: 60_000 }
+    )
       .then((res) => {
         if (cancelled) return;
         const list = res.data?.products ?? res.data?.results ?? res.data ?? [];

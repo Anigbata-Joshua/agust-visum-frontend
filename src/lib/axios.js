@@ -1,10 +1,5 @@
 import axios from "axios";
 
-/**
- * Per-domain storage keys. We treat the user and merchant as completely
- * separate auth domains — the backend issues distinct JWT pairs and
- * refuses tokens from one on the other's routes, so we never mix them.
- */
 const STORAGE = {
   user: {
     access: "agt_user_token",
@@ -30,17 +25,23 @@ const api = axios.create({
   timeout: 30_000,
 });
 
-/**
- * Decide which auth domain applies to a given request.
- *   - Anything under /merchants/* or /sales/* is merchant-scoped.
- *   - Anything under /users/* is user-scoped.
- *   - Everything else defaults to user-scoped (cart, products, etc.).
- */
+const MERCHANT_MUTATION_PREFIXES = ["/products", "/categories"];
+
 function getRequestScope(config) {
   const url = config?.url || "";
+  const method = (config?.method || "get").toLowerCase();
+
   if (url.startsWith("/merchants") || url.startsWith("/sales")) {
     return STORAGE.merchant;
   }
+
+  if (
+    method !== "get" &&
+    MERCHANT_MUTATION_PREFIXES.some((prefix) => url.startsWith(prefix))
+  ) {
+    return STORAGE.merchant;
+  }
+
   return STORAGE.user;
 }
 
@@ -57,22 +58,6 @@ api.interceptors.request.use((config) => {
   }
   return config;
 });
-
-/* ------------------------------------------------------------------ *
- * Response interceptor — 401 → silent refresh → retry once
- *
- * Behaviour per the backend contract (§2.4 of the API guide):
- *   - The refresh token ROTATES every use. We must save BOTH the new
- *     access and the new refresh on every successful refresh, and we
- *     must NOT retry the original request until both are persisted.
- *   - Reusing an already-rotated refresh token revokes the entire
- *     session, so the second `await refresh()` would just fail and
- *     force a logout.
- *   - If the refresh itself fails, we clear the stored tokens for the
- *     domain, dispatch the domain's `*-logout` event, and reject the
- *     original promise. Stores react to that event to log the user out
- *     cleanly.
- * ------------------------------------------------------------------ */
 
 let refreshInFlight = null; // de-dupe parallel refreshes per page lifetime
 

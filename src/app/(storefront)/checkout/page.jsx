@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { MessageCircle } from "lucide-react";
 import { useCartStore } from "@/store/useCartStore";
@@ -180,9 +181,11 @@ export default function CheckoutPage() {
                     >
                       {item.product?.images?.[0] && (
                         <div className="w-16 h-20 bg-stone overflow-hidden shrink-0">
-                          <img
+                          <Image
                             src={item.product.images[0]}
-                            alt={item.product?.title}
+                            alt={item.product?.title || ""}
+                            width={64}
+                            height={80}
                             className="w-full h-full object-cover"
                           />
                         </div>
