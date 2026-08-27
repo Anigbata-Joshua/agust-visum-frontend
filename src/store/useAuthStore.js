@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { authService } from "@/services/auth.service";
+import { getErrorMessage } from "@/lib/utils";
 
 /**
  * User (customer) auth store.
@@ -115,8 +116,9 @@ export const useAuthStore = create((set, get) => {
         localStorage.setItem("agt_user_profile", JSON.stringify(user));
         set({ user, token: accessToken, isAuthenticated: true });
         return { success: true };
+        
       } catch (err) {
-        const message = err.response?.data?.message || err.message || "Registration failed.";
+        const message = getErrorMessage(err, "Registration failed.");
         set({ error: message });
         return { success: false, error: message };
       } finally {

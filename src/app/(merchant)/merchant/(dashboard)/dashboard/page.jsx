@@ -55,14 +55,19 @@ export default function MerchantDashboardPage() {
     };
   }, []);
 
-  const sales = analytics.sales;
-  const totalRevenue = analytics.total_revenue;
-  const orderCount = sales.length;
-  const avgOrder = orderCount > 0 ? totalRevenue / orderCount : 0;
+const sales = analytics.sales;
+const totalRevenue = analytics.total_revenue;
+// "Orders", "Avg. order", and the chart below all need to reflect only
+// confirmed (paid) sales — otherwise a pile of pending/cancelled orders
+// would inflate the order count and revenue chart even though the
+// "Revenue" stat card above (sourced from the API's total_revenue) is
+// already correctly confirmed-only. Same bug, different display.
+const confirmedSales = sales.filter((s) => s.status === "paid");
+const orderCount = confirmedSales.length;
+const avgOrder = orderCount > 0 ? totalRevenue / orderCount : 0;
 
-  // Build a chart series. The backend may return sales with `created_at`
-  // and `line_total`/`total`. Bucket by day.
-  const series = bucketSalesByDay(sales);
+// Build a chart series from confirmed sales only.
+const series = bucketSalesByDay(confirmedSales);
 
   const tableRows = sales.slice(0, 8).map((s) => ({
     Product: s.title || s.product?.title || "—",

@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { authService } from "@/services/auth.service";
-
+import { getErrorMessage } from "@/lib/utils";
 /**
  * Merchant auth store. Mirrors `useAuthStore` but for the merchant
  * domain. The `merchant` object includes `status` ("pending" |
@@ -90,7 +90,7 @@ export const useMerchantStore = create((set, get) => {
         set({ merchant, token: accessToken, isAuthenticated: true });
         return { success: true };
       } catch (err) {
-        const message = err.response?.data?.message || err.message || "Invalid credentials.";
+        const message = getErrorMessage(err, "Invalid credentials."); 
         set({ error: message });
         return { success: false, error: message };
       } finally {

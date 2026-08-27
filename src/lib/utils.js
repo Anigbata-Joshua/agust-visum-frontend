@@ -12,3 +12,21 @@ export function formatNaira(amount) {
     maximumFractionDigits: 0,
   }).format(amount);
 }
+
+export function getErrorMessage(err, fallback = "Something went wrong.") {
+  const backendMessage = err?.response?.data?.message;
+  if (backendMessage) return backendMessage;
+
+  const status = err?.response?.status;
+  if (status === 429) {
+    return "Too many attempts. Please wait a few minutes and try again.";
+  }
+  if (status === 401) {
+    return "Invalid credentials.";
+  }
+  if (status >= 500) {
+    return "Something went wrong on our end. Please try again shortly.";
+  }
+
+  return err?.message || fallback;
+}
